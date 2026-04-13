@@ -22,6 +22,7 @@ public class SmartCampusApp {
 
     public static void main(String[] args) {
         try {
+            System.setProperty("flatlaf.useNativeLibrary", "false");
             FlatLightLaf.setup();
             UIManager.put("Button.arc", 8);
             UIManager.put("TextComponent.arc", 8);

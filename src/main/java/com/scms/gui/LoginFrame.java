@@ -72,7 +72,8 @@ public class LoginFrame extends JFrame {
         centerWrapper.setOpaque(false);
         centerWrapper.setLayout(new BoxLayout(centerWrapper, BoxLayout.Y_AXIS));
 
-        JLabel logoLabel = loadLogoImage("/images/cardiffmet_logo_white.png", 320);
+        JLabel logoLabel = loadLogoImage(
+                "/images/cardiffmet_logo_white.png", 320);
         if (logoLabel != null) {
             logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             centerWrapper.add(logoLabel);
@@ -136,9 +137,16 @@ public class LoginFrame extends JFrame {
     private JLabel loadLogoImage(String resourcePath, int targetWidth) {
         try {
             InputStream is = getClass().getResourceAsStream(resourcePath);
-            if (is == null) return null;
+            if (is == null) {
+                System.err.println("Logo resource not found: " + resourcePath);
+                return null;
+            }
             BufferedImage img = ImageIO.read(is);
-            if (img == null) return null;
+            is.close();
+            if (img == null) {
+                System.err.println("Failed to decode image: " + resourcePath);
+                return null;
+            }
 
             double scale = (double) targetWidth / img.getWidth();
             int targetHeight = (int) (img.getHeight() * scale);
@@ -148,6 +156,7 @@ public class LoginFrame extends JFrame {
             label.setPreferredSize(new Dimension(targetWidth, targetHeight));
             return label;
         } catch (Exception e) {
+            System.err.println("Error loading logo: " + e.getMessage());
             return null;
         }
     }
